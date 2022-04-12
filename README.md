@@ -133,7 +133,9 @@ tail -100f logs/nifi-app.log
 after 2-3 min you can open the link inside browser  
 <url>http://192.168.000.000:7070/
 
-apply to use nifi as a service
+<h3>3- Nifi Additional Configs</h3>
+
+**apply to use nifi as a service**
 ```
 /data/nifi-1.15.3/bin/nifi.sh install
 sudo systemctl daemon-reload
@@ -142,4 +144,39 @@ sudo service nifi start
 check service status
 ```
 sudo service nifi status
+```
+
+**apply to use nifi as a service with non root user**
+stop the nifi and change file owners with the new user
+```
+sudo service nifi stop
+chown -R dtpamdatalake01 /data
+chgrp -R dtpamdatalake01 /data
+```
+edit the bootstrap config file
+```
+vi /data/nifi-1.15.3/conf/bootstrap.conf
+```
+
+change the line
+```
+run.as=dtpamdatalake01
+```  
+run nifi again as a service and ceck status
+```
+/data/nifi-1.15.3/bin/nifi.sh install
+sudo systemctl daemon-reload
+sudo service nifi start
+sudo service nifi status
+```
+  
+  
+**apply to change JVM heap size**
+```
+vi /data/nifi-1.15.3/conf/bootstrap.conf
+```
+```
+# JVM memory settings
+java.arg.2=-Xms8G
+java.arg.3=-Xmx8G
 ```
